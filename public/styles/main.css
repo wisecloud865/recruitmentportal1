@@ -4323,3 +4323,46 @@ tr.company-hidden {
 .view-candidates-btn:hover {
   background: #218838;
 }
+.company-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+.send-email-btn,
+.view-candidates-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.send-email-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.view-candidates-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.send-email-btn:hover,
+.view-candidates-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.send-email-btn i,
+.view-candidates-btn i {
+  font-size: 16px;
+}

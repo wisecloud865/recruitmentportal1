@@ -498,19 +498,34 @@ document.addEventListener("DOMContentLoaded", async () => {
             'Show More Company Info <i class="fas fa-caret-down"></i>';
           companyContainer.appendChild(companyDropdownBtn);
 
+          // Create a container for the buttons
+          const buttonContainer = document.createElement("div");
+          buttonContainer.className = "company-action-buttons";
+
+          // Create Send Email button
+          const sendEmailBtn = document.createElement("button");
+          sendEmailBtn.className = "send-email-btn";
+          sendEmailBtn.innerHTML = '<i class="fas fa-envelope"></i> Send Email';
+
+          // Update View Candidates button to match Send Email style
+          const viewCandidatesBtn = document.createElement("button");
+          viewCandidatesBtn.className = "view-candidates-btn";
+          viewCandidatesBtn.innerHTML =
+            '<i class="fas fa-users"></i> View Matched Candidates';
+
+          // Add buttons to the container
+          buttonContainer.appendChild(sendEmailBtn);
+          buttonContainer.appendChild(viewCandidatesBtn);
+
+          // Add button container to company container
+          companyContainer.appendChild(buttonContainer);
+
           // Setup company dropdown functionality
           handleCompanyDropdown(
             companyContainer,
             companyTable,
             companyDropdownBtn
           );
-
-          // Add View Candidates button
-          const viewCandidatesBtn = document.createElement("button");
-          viewCandidatesBtn.className = "view-candidates-btn";
-          viewCandidatesBtn.innerHTML =
-            '<i class="fas fa-users"></i> View Matched Candidates';
-          companyContainer.appendChild(viewCandidatesBtn);
 
           // Handle View Candidates click
           viewCandidatesBtn.addEventListener("click", async () => {
