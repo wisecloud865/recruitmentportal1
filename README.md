@@ -1,3 +1,5 @@
+# recruitmentportal1
+
 # Homepage Project / Recruitment Portal
 
 This project is a simple homepage that showcases information about companies and candidates, as well as an internal recruitment portal. It utilizes HTML, CSS, JavaScript, and Vercel for deployment to create a dynamic and visually appealing user interface.
