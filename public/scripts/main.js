@@ -324,7 +324,7 @@ function showCandidatesModal(candidates, companyName) {
   });
 }
 
-// Update your DOMContentLoaded event listener
+// Update your DOMContentLoaded event listener to include pagination
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const companiesSection = document.getElementById("companies");
@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     const metadata = await metadataResponse.json();
 
-    // Move pagination container to companiesSection
+    // Add pagination container
     const paginationContainer = document.createElement("div");
     paginationContainer.className = "pagination-controls";
     companiesSection.appendChild(paginationContainer);
@@ -367,6 +367,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Function to render companies for a page
     async function renderCompaniesPage(pageNumber) {
       try {
+        // Clear existing companies
         const existingCompanies =
           companiesSection.querySelectorAll(".company-container");
         existingCompanies.forEach((container) => container.remove());
