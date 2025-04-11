@@ -1,0 +1,13 @@
+{
+  "name": "recruitmentportal",
+  "version": "1.0.0",
+  "description": "Recruitment Portal with API routes on Vercel",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build needed'",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.1.1"
+  }
+}
