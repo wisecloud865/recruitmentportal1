@@ -523,7 +523,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           confirmationDialog.innerHTML = `
             <p>Are you sure you want to send an email?</p>
             <div class="confirmation-buttons">
-              <button class="confirm-btn">Yes, Send</button>
+              <button class="confirm-btn">Yes, Send!</button>
               <button class="cancel-btn">Cancel</button>
             </div>
           `;
