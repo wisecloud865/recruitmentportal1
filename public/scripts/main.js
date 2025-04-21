@@ -489,24 +489,28 @@ document.addEventListener("DOMContentLoaded", async () => {
           companyTable.appendChild(companyTbody);
           companyContainer.appendChild(companyTable);
 
-          companiesSection.appendChild(companyContainer);
+          // 1. First add dropdown button
+          const companyDropdownBtn = document.createElement("button");
+          companyDropdownBtn.className = "dropdown-btn company-dropdown-btn";
+          companyDropdownBtn.innerHTML =
+            'Show More Company Info <i class="fas fa-caret-down"></i>';
+          companyContainer.appendChild(companyDropdownBtn);
 
-          // Create container for action buttons
+          // 2. Create and add action buttons container
           const actionButtonsContainer = document.createElement("div");
           actionButtonsContainer.className = "company-action-buttons";
 
-          // Add Send Email button
-          const sendEmailBtn = document.createElement("button");
-          sendEmailBtn.className = "send-email-btn";
-          sendEmailBtn.innerHTML = '<i class="fas fa-envelope"></i> Send Email';
-
-          // Add View Candidates button
+          // 3. Add View Candidates button
           const viewCandidatesBtn = document.createElement("button");
           viewCandidatesBtn.className = "view-candidates-btn";
           viewCandidatesBtn.innerHTML =
             '<i class="fas fa-users"></i> View Matched Candidates';
 
-          // Add confirmation dialog for email
+          // 4. Add Send Email button and confirmation dialog
+          const sendEmailBtn = document.createElement("button");
+          sendEmailBtn.className = "send-email-btn";
+          sendEmailBtn.innerHTML = '<i class="fas fa-envelope"></i> Send Email';
+
           const confirmationDialog = document.createElement("div");
           confirmationDialog.className = "confirmation-dialog hidden";
           confirmationDialog.innerHTML = `
@@ -517,7 +521,40 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
           `;
 
-          // Add event listeners
+          // 5. Add buttons to container in desired order
+          actionButtonsContainer.appendChild(viewCandidatesBtn);
+          actionButtonsContainer.appendChild(sendEmailBtn);
+          actionButtonsContainer.appendChild(confirmationDialog);
+
+          // 6. Add container to company container
+          companyContainer.appendChild(actionButtonsContainer);
+
+          // 7. Setup company dropdown functionality
+          handleCompanyDropdown(
+            companyContainer,
+            companyTable,
+            companyDropdownBtn
+          );
+
+          // Handle View Candidates click
+          viewCandidatesBtn.addEventListener("click", async () => {
+            try {
+              const candidatesResponse = await fetch(
+                `/public/candidates/company_${company.id}.json`
+              );
+              if (!candidatesResponse.ok) {
+                throw new Error("No candidates found");
+              }
+
+              const candidates = await candidatesResponse.json();
+              showCandidatesModal(candidates, company.företagsnamn);
+            } catch (error) {
+              console.error("Error loading candidates:", error);
+              showNotification("No candidates found for this company", false);
+            }
+          });
+
+          // Add confirmation dialog for email
           sendEmailBtn.addEventListener("click", () => {
             confirmationDialog.classList.remove("hidden");
           });
@@ -543,46 +580,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             .addEventListener("click", () => {
               confirmationDialog.classList.add("hidden");
             });
-
-          // Add buttons to container
-          actionButtonsContainer.appendChild(sendEmailBtn);
-          actionButtonsContainer.appendChild(viewCandidatesBtn);
-          actionButtonsContainer.appendChild(confirmationDialog);
-
-          // Add container to company container
-          companyContainer.appendChild(actionButtonsContainer);
-
-          // Add company dropdown button
-          const companyDropdownBtn = document.createElement("button");
-          companyDropdownBtn.className = "dropdown-btn company-dropdown-btn";
-          companyDropdownBtn.innerHTML =
-            'Show More Company Info <i class="fas fa-caret-down"></i>';
-          companyContainer.appendChild(companyDropdownBtn);
-
-          // Setup company dropdown functionality
-          handleCompanyDropdown(
-            companyContainer,
-            companyTable,
-            companyDropdownBtn
-          );
-
-          // Handle View Candidates click
-          viewCandidatesBtn.addEventListener("click", async () => {
-            try {
-              const candidatesResponse = await fetch(
-                `/public/candidates/company_${company.id}.json`
-              );
-              if (!candidatesResponse.ok) {
-                throw new Error("No candidates found");
-              }
-
-              const candidates = await candidatesResponse.json();
-              showCandidatesModal(candidates, company.företagsnamn);
-            } catch (error) {
-              console.error("Error loading candidates:", error);
-              showNotification("No candidates found for this company", false);
-            }
-          });
         });
 
         updatePaginationControls(pageNumber, metadata.totalPages);
