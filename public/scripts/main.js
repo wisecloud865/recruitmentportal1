@@ -228,9 +228,7 @@ function createCompanyTitle(company) {
           ${companyTypeIndicators}
         </div>
       </h2>
-      <button class="send-email-btn">
-        <i class="fas fa-envelope"></i> Send Email
-      </button>
+      
     </div>
   `;
 }
@@ -491,34 +489,75 @@ document.addEventListener("DOMContentLoaded", async () => {
           companyTable.appendChild(companyTbody);
           companyContainer.appendChild(companyTable);
 
+          companiesSection.appendChild(companyContainer);
+
+          // Create container for action buttons
+          const actionButtonsContainer = document.createElement("div");
+          actionButtonsContainer.className = "company-action-buttons";
+
+          // Add Send Email button
+          const sendEmailBtn = document.createElement("button");
+          sendEmailBtn.className = "send-email-btn";
+          sendEmailBtn.innerHTML = '<i class="fas fa-envelope"></i> Send Email';
+
+          // Add View Candidates button
+          const viewCandidatesBtn = document.createElement("button");
+          viewCandidatesBtn.className = "view-candidates-btn";
+          viewCandidatesBtn.innerHTML =
+            '<i class="fas fa-users"></i> View Matched Candidates';
+
+          // Add confirmation dialog for email
+          const confirmationDialog = document.createElement("div");
+          confirmationDialog.className = "confirmation-dialog hidden";
+          confirmationDialog.innerHTML = `
+            <p>Are you sure you want to send an email?</p>
+            <div class="confirmation-buttons">
+              <button class="confirm-btn">Yes, Send</button>
+              <button class="cancel-btn">Cancel</button>
+            </div>
+          `;
+
+          // Add event listeners
+          sendEmailBtn.addEventListener("click", () => {
+            confirmationDialog.classList.remove("hidden");
+          });
+
+          confirmationDialog
+            .querySelector(".confirm-btn")
+            .addEventListener("click", () => {
+              const emails = [
+                company.kontakt_email1,
+                company.kontakt_email2,
+              ].filter((email) => email && email !== "N/A");
+
+              if (emails.length > 0) {
+                window.location.href = `mailto:${emails.join(",")}`;
+              } else {
+                alert("No email addresses found");
+              }
+              confirmationDialog.classList.add("hidden");
+            });
+
+          confirmationDialog
+            .querySelector(".cancel-btn")
+            .addEventListener("click", () => {
+              confirmationDialog.classList.add("hidden");
+            });
+
+          // Add buttons to container
+          actionButtonsContainer.appendChild(sendEmailBtn);
+          actionButtonsContainer.appendChild(viewCandidatesBtn);
+          actionButtonsContainer.appendChild(confirmationDialog);
+
+          // Add container to company container
+          companyContainer.appendChild(actionButtonsContainer);
+
           // Add company dropdown button
           const companyDropdownBtn = document.createElement("button");
           companyDropdownBtn.className = "dropdown-btn company-dropdown-btn";
           companyDropdownBtn.innerHTML =
             'Show More Company Info <i class="fas fa-caret-down"></i>';
           companyContainer.appendChild(companyDropdownBtn);
-
-          // Create a container for the buttons
-          const buttonContainer = document.createElement("div");
-          buttonContainer.className = "company-action-buttons";
-
-          // Create Send Email button
-          const sendEmailBtn = document.createElement("button");
-          sendEmailBtn.className = "send-email-btn";
-          sendEmailBtn.innerHTML = '<i class="fas fa-envelope"></i> Send Email';
-
-          // Update View Candidates button to match Send Email style
-          const viewCandidatesBtn = document.createElement("button");
-          viewCandidatesBtn.className = "view-candidates-btn";
-          viewCandidatesBtn.innerHTML =
-            '<i class="fas fa-users"></i> View Matched Candidates';
-
-          // Add buttons to the container
-          buttonContainer.appendChild(sendEmailBtn);
-          buttonContainer.appendChild(viewCandidatesBtn);
-
-          // Add button container to company container
-          companyContainer.appendChild(buttonContainer);
 
           // Setup company dropdown functionality
           handleCompanyDropdown(
@@ -544,8 +583,6 @@ document.addEventListener("DOMContentLoaded", async () => {
               showNotification("No candidates found for this company", false);
             }
           });
-
-          companiesSection.appendChild(companyContainer);
         });
 
         updatePaginationControls(pageNumber, metadata.totalPages);
